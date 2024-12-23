@@ -89,3 +89,76 @@ bp_stats_by_age <- dataset %>%
 
 print("Resting Blood Pressure Stats by Age Group:")
 print(bp_stats_by_age)
+
+####  Perform correlation analysis between continuous variables like age, trestbps, chol, and thalach. 
+#Which variables show the strongest relationship? ####
+
+
+# Load necessary libraries
+install.packages("corrplot")
+library(corrplot)  # For visualizing the correlation matrix
+library(readr)
+library(tidyverse)
+library(dplyr)
+
+# Load the dataset
+#url <- "https://raw.githubusercontent.com/mominul58/Heart-Disease-Analysis/main/heart.csv"
+heart_data <- read_csv(url)
+
+# Select continuous variables for correlation analysis
+selected_vars <- heart_data %>% 
+  select(age, trestbps, chol, thalach)
+
+# Compute the correlation matrix
+cor_matrix <- cor(selected_vars, use = "complete.obs")  # use complete.obs to exclude NAs
+
+# Display the correlation matrix
+print(cor_matrix)
+
+# Visualize the correlation matrix using corrplot
+corrplot(cor_matrix, method = "color", type = "upper", 
+         addCoef.col = "black", # Add correlation coefficients
+         tl.col = "blue",       # Color for labels
+         tl.srt = 45,           # Rotate text labels
+         diag = FALSE)          # Hide diagonal
+
+
+
+#### Use scatter plots to visualize:####
+
+#The relationship between cholesterol (chol) and age (age).
+
+ggplot(heart_data, aes(x = age, y = chol)) +
+  geom_point(aes(color = factor(target)), size = 2) +  # Color points by heart disease status (target)
+  labs(title = "Cholesterol vs Age",
+       x = "Age",
+       y = "Cholesterol Level") +
+  theme_minimal() +
+  theme(legend.title = element_blank())  # Remove legend title
+
+#The relationship between maximum heart rate (thalach) and exercise-induced angina (exang).
+
+ggplot(heart_data, aes(x = thalach, y = factor(exang))) +
+  geom_point(aes(color = factor(target)), size = 2) +  # Color points by heart disease status (target)
+  labs(title = "Maximum Heart Rate vs Exercise-Induced Angina",
+       x = "Maximum Heart Rate (thalach)",
+       y = "Exercise-Induced Angina (exang)") +
+  theme_minimal() +
+  theme(legend.title = element_blank())  # Remove legend title
+
+
+
+####Create bar graph to compare:####
+
+#The proportion of males and females with heart disease.
+
+ggplot(heart_data, aes(x = factor(sex), fill = factor(target))) +
+  geom_bar(position = "fill") +  # Use "fill" to show proportions
+  labs(title = "Proportion of Males and Females with Heart Disease",
+       x = "Gender (1 = Male, 0 = Female)",
+       y = "Proportion",
+       fill = "Heart Disease") +
+  scale_x_discrete(labels = c("0" = "Female", "1" = "Male")) +
+  scale_fill_manual(values = c("lightblue", "salmon"),
+                    labels = c("No Heart Disease", "Heart Disease")) +
+  theme_minimal()
