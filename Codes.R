@@ -5,11 +5,6 @@ library(tidyverse)
 library(dplyr)
 library(openxlsx)
 
-#Directory for data save
-setwd('F:/R Programming/Public Health')
-getwd()
-
-# I use csv data from my github repository
 
 # URL of the raw CSV file
 url <- "https://raw.githubusercontent.com/mominul58/Heart-Disease-Analysis/main/heart.csv"
@@ -37,7 +32,7 @@ cp_frequency <- table(dataset$cp)
 print(sex_frequency)
 
 print(age_frequency)
-#write.xlsx(age_frequency,file="age_frequency.xlsx") #i save this file in my directory
+#write.xlsx(age_frequency,file="age_frequency.xlsx") #to save this file in my directory
 
 print(cp_frequency)
 #write.xlsx(cp_frequency,file="cp_frequency.xlsx")
